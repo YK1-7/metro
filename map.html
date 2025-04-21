@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة مترو الرياض</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body dir="rtl">
+    <h1>خريطة مترو الرياض</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+       
+        var map = L.map('map').setView([24.7136, 46.6753], 12);
+
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        
+        var yellowStations = [
+            { coords: [24.7678740402426, 46.6430089081625], name: "محطة كافد", showMarker: true },
+            { coords: [24.774756, 46.640741], showMarker: false },
+            { coords: [24.779276, 46.643816], showMarker: false },
+            { coords: [24.7862173626048, 46.6601128311745], name: "محطة الربيع", showMarker: true },
+            { coords: [24.8014266428389, 46.6962161224483], name: "محطة عثمان بن عفان", showMarker: true },
+            { coords: [24.8071510469124, 46.7095830538778], name: "محطة سابك", showMarker: true },
+            { coords: [24.810108, 46.713344], showMarker: false },
+            { coords: [24.814600, 46.713301], showMarker: false },
+            { coords: [24.830053, 46.721256], showMarker: false },
+            { coords: [24.832250, 46.721414], showMarker: false },
+            { coords: [24.838465, 46.717732], showMarker: false },
+            { coords: [24.841272, 46.717314], name: "محطة جامعة الاميرة نورة 1", showMarker: true },
+            { coords: [24.849805, 46.710323], showMarker: false },
+            { coords: [24.859618, 46.704291], name: "محطة جامعة الاميرة نورة 2", showMarker: true },
+            { coords: [24.875331, 46.694711], showMarker: false },
+            { coords: [24.888583, 46.694588], showMarker: false },
+            { coords: [24.895045, 46.697240], showMarker: false },
+            { coords: [24.902126, 46.705440], showMarker: false },
+            { coords: [24.910825, 46.721147], showMarker: false },
+            { coords: [24.918270, 46.723144], showMarker: false },
+            { coords: [24.9410118810569, 46.7109215436514], name: "صالة رقم 5", showMarker: true },     
+            { coords: [ 24.9561451150526, 46.7022528011584], name: "صالة رقم 3-4", showMarker: true },
+            { coords: [24.961117, 46.698956], name: "صالة رقم 2-1", showMarker: true }
+        ];
+
+        var purpleStations = [
+            { coords: [24.7678740402426, 46.6430089081625], name: "محطة كافد", showMarker: true },
+            { coords: [24.774756, 46.640741], showMarker: false },
+            { coords: [24.779276, 46.643816], showMarker: false },
+            { coords: [24.7862173626048, 46.6601128311745], name: "محطة الربيع", showMarker: true },
+            { coords: [24.8014266428389, 46.6962161224483], name: "محطة عثمان بن عفان", showMarker: true },
+            { coords: [24.8071510469124, 46.7095830538778], name: "محطة سابك", showMarker: true },
+            { coords: [24.808753, 46.713983], showMarker: false },
+            { coords: [24.808585, 46.714216], showMarker: false },
+            { coords: [24.804474, 46.715945], showMarker: false },
+            { coords: [24.794895, 46.720234], showMarker: false },
+            { coords: [24.792460, 46.719737], showMarker: false },
+            { coords: [24.791066, 46.720214], showMarker: false },
+            { coords: [24.788068, 46.723977], showMarker: false },  
+            { coords: [24.786229, 46.725070], showMarker: false },
+            { coords: [24.785642, 46.725743], showMarker: false },
+            { coords: [24.785660, 46.727106], showMarker: false },
+            { coords: [24.7865272753978, 46.7292831080613], name: "محطة غرناطية", showMarker: true },
+            { coords: [24.799606, 46.760640], showMarker: false },
+            { coords: [24.799502, 46.761515], showMarker: false },
+            { coords: [24.798791, 46.762456], showMarker: false },
+            { coords: [24.7912982035996, 46.7662397988552], name: "محطة اليرموك", showMarker: true },
+            { coords: [24.785133, 46.769904], showMarker: false },
+            { coords: [24.7759490248002, 46.7766872056109], name: "محطة الحمراء", showMarker: true },
+            { coords: [24.764522, 46.785072], showMarker: false },
+            { coords: [24.763516, 46.785203], showMarker: false },
+            { coords: [24.756780276022, 46.7904404126127], name: "محطة الأندلس", showMarker: true },
+            { coords: [24.745335, 46.798430], showMarker: false },
+            { coords: [24.742702, 46.797567], showMarker: false },
+            { coords: [24.741876, 46.797731], showMarker: false },
+            { coords: [24.740801, 46.798522], name: "محطة طريق خريص", showMarker: true },
+            { coords: [24.738803, 46.799889], showMarker: false },
+            { coords: [24.737892, 46.800075], showMarker: false },
+            { coords: [24.737286, 46.800373], showMarker: false },
+            { coords: [24.7227505033675, 46.8113891250413], name: "محطة السلام", showMarker: true },
+            { coords: [24.7006600279772, 46.8273611707952], name: "محطة النسيم", showMarker: true }
+        ];
+
+        var redStations = [
+            { coords: [24.7103062218672, 46.6283573858765], name: "جامعة الملك سعود", showMarker: true },
+            { coords: [24.715485, 46.632885], showMarker: false },
+            { coords: [24.715432, 46.634324], showMarker: false },
+            { coords: [24.716028, 46.635747], showMarker: false },
+            { coords: [24.7170630090742, 46.6386071632697], name: "واحة الملك سلمان", showMarker: true },
+            { coords: [24.7211022175657, 46.6481382884355], name: "المدينة التقنية", showMarker: true },
+            { coords: [24.7238439086365, 46.6545792090235], name: "التخصصي ", showMarker:true  },
+            { coords: [24.726533, 46.662043], showMarker: false },
+            { coords: [24.726053, 46.665001], showMarker: false },
+            { coords: [24.726597, 46.666697], name: "STC", showMarker:true  },
+            { coords: [24.728133, 46.669038], showMarker: false },
+            { coords: [24.730979, 46.671337], showMarker: false },
+            { coords: [24.7333496017795, 46.6770909900467], name: "الورود", showMarker:true  },
+            { coords: [24.7368253219394, 46.6853554906618], name: "طريق الملك عبدالعزيز", showMarker:true  },
+            { coords: [24.7401132964319, 46.6948417000634], name: "وزارة التعليم", showMarker:true  },
+            { coords: [24.7481900854673, 46.7122959660363], name: "النزهة", showMarker:true  },
+            { coords: [24.7546021927314, 46.7271091850735], name: "مركز الرياض للمعارض", showMarker:true  },
+            { coords: [24.767675, 46.758966], name: "طريق خالد بن الوليد", showMarker:true  },
+            { coords: [24.771969, 46.768910], showMarker: false },
+            { coords: [24.7759490248002, 46.7766872056109], name: "محطة الحمراء", showMarker: true },
+            { coords: [24.778424, 46.783530], showMarker: false },
+            { coords: [24.779794, 46.789564], showMarker: false },
+            { coords: [24.7822455169668, 46.794473848239], name: "الخليج", showMarker:true  },
+            { coords: [24.7924317817852, 46.8109399673992], name: "اشبيليا", showMarker:true  },
+            { coords: [24.801526, 46.825511], showMarker: false },
+            { coords: [24.801409, 46.826412], showMarker: false },
+            { coords: [24.792676, 46.834181], showMarker: false },
+            { coords: [24.792545, 46.835134], showMarker: false },
+            { coords: [24.7930678858698, 46.8365958519172], name: "مدينة الملك فهد الرياضية", showMarker:true  }
+        ];
+
+        
+        function offsetCoords(coords, offsetLat, offsetLng) {
+            return [coords[0] + offsetLat, coords[1] + offsetLng];
+        }
+
+       
+        function drawPath(stations, color, name, offsetLat = 0, offsetLng = 0) {
+
+            L.polyline(
+                stations.map(s => offsetCoords(s.coords, offsetLat, offsetLng)),
+                { color: color, weight: 6 }
+            ).bindPopup(name).addTo(map);
+
+           
+            stations.forEach(station => {
+                if (station.showMarker) {
+                    L.circleMarker(offsetCoords(station.coords, offsetLat, offsetLng), {
+                        radius: 6,
+                        color: color,
+                        fillColor: color,
+                        fillOpacity: 1
+                    })
+                        .bindPopup(station.name)
+                        .addTo(map);
+                }
+            });
+        }
+
+        
+        drawPath(yellowStations, 'yellow', "المسار الأصفر", 0.00005, 0);
+        drawPath(purpleStations, 'purple', "المسار البنفسجي", -0.00005, 0);
+        drawPath(redStations, 'red', "المسار الأحمر", 0, 0.00005);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs Section</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e1dede;
+            background-image: url(KAFD-Metro-Station.png);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            margin: 0;
+            padding: 15px;
+
+            color: rgb(5, 5, 5);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #00b35465;
+        }
+
+        .faq-item:target .faq-answer {
+            max-height: 200px;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="faq-container">
+        <h2>Frequently Asked Questions</h2>
+
+        <div id="faq1" class="faq-item">
+            <a href="#faq1" class="faq-question">What are the train operating hours?</a>
+            <b>
+                <div class="faq-answer">Daily from 6 am to 12 midnight.</div>
+            </b>
+        </div>
+
+        <div id="faq2" class="faq-item">
+            <a href="#faq2" class="faq-question">What is the train schedule?</a>
+            <b>
+                <div class="faq-answer">Usually between 3 to 5 minutes, for more information you can check the live
+                    Train schedules.</div>
+            </b>
+        </div>
+
+        <div id="faq3" class="faq-item">
+            <a href="#faq3" class="faq-question">Can i access my account from another mobile device?</a>
+            <b>
+                <div class="faq-answer">Yes, using the correct username and password.</div>
+            </b>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyadh metro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            direction: rtl;
+        }
+
+
+        nav {
+            background-color: #0da514;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav .menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a,
+        nav button {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover,
+        nav button:hover {
+            background-color: #228b22;
+        }
+
+        nav button {
+            background-color: #fff;
+            color: #0da514;
+            border: 1px solid #0da514;
+            cursor: pointer;
+        }
+
+
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #0da514;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+
+        
+        .routes {
+    padding: 20px;
+}
+
+.route {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: right;
+    cursor: pointer;
+}
+
+
+button.route {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+}
+
+.route-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.yellow { background-color: #ffd700; }
+.red { background-color: #ff4500; }
+.purple { background-color: #8a2be2; }
+
+.route-info {
+    flex-grow: 1;
+}
+
+.route-info h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.route-info p {
+    font-size: 14px;
+    color: #666;
+}
+
+.route-arrow {
+    font-size: 18px;
+    color: #999;
+}
+.route:hover{
+    background-color: #ded9d9;
+}
+
+
+        footer {
+            background-color: #0da514;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="menu">
+            <a href="map.html">Map</a>
+            <a href="tickets.html">Tickets</a>
+            <a href="Lines.html">Lines</a>
+            <a href="Plan.html">Plan</a>
+            <a href="FAQ.html">FAQ’s</a>
+        </div>
+        <div class="menu">
+            <button> <a href="interface.html" style="color: #0da514;">العربية</a></button>
+            <a href="index.html"> Log In</a>
+        </div>
+    </nav>
+
+
+    <header>
+        <h1>Riyadh Metro</h1>
+        <p>
+            The Riyadh Metro connects the city with a modern transportation network, contributing to reduced congestion and enhanced quality of life
+        </p>
+
+    </header>
+
+    <section class="routes">
+        <button type="button" class="route" onclick="window.location.href='Lines.html'">
+            <div class="route-icon yellow">1</div>
+            <div class="route-info">
+                <h3>Yellow Line</h3>
+                <p>KAFD ↔ Airport T1-2</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+        <button type="button" class="route"onclick="window.location.href='Lines.html'">
+            <div class="route-icon red">2</div>
+            <div class="route-info">
+                <h3>Red Line</h3>
+                <p>King Saud University ↔ King Fahd Sports City</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+        <button type="button" class="route" onclick="window.location.href='Lines.html'">
+            <div class="route-icon purple">3</div>
+            <div class="route-info">
+                <h3> Purple Line</h3>
+                <p>KAFD ↔ Alnaseem</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+        <center>
+            <img src="metro2.png" height="300" width="1000">
+        </center>
+        <h1 style="color: #0da514;">
+            Idea About Riyadh Metro
+        </h1>
+        <p>
+            Public transportation in Riyadh was established under the leadership of His Royal Highness Prince Mohammed
+            bin Salman bin Abdulaziz Al Saud, Crown Prince, Prime Minister, and Chairman of the Royal Commission for
+            Riyadh City (RCRC). This comprehensive transportation system serves the residents and visitors of Riyadh
+
+            The system connects the city through a variety of transport modes, including metro lines, buses, bus rapid
+            transit (BRT), and feeder buses, providing seamless connectivity across the city. It also offers “Park &
+            Ride” facilities for commuters
+
+            Riyadh’s public transportation is dedicated to delivering high-quality, user-friendly services that
+            contribute to economic growth and environmental sustainability. By meeting diverse mobility needs, the
+            system enhances ease of movement within the city, reduces reliance on private vehicles, and makes traveling
+            across the Saudi capital easy, reliable, and convenient
+        </p>
+    </section>
+
+
+    <footer>
+        <nav>
+            <div class="menu">
+                <a href="map.html" style="color: #ddd;">Map</a>
+                <a href="tickets.html" style="color: #ddd;">Tickets</a>
+                <a href="Lines.html" style="color: #ddd;">Lines</a>
+                <a href="Plan.html" style="color: #ddd;">Plan</a>
+                <a href="FAQ.html" style="color: #ddd;">FAQ’s</a>
+            </div>
+        </nav>
+        <p>Contact Us: <a href="tel:+966123456789">+966 123 456 789</a></p>
+        <p>© All rights reserved to Riyadh Metro 2025</p>
+    </footer>
+</body>
+
+</html>

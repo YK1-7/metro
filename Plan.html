@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة مترو الرياض</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #2A5C82;
+            --secondary-color: #33A1C9;
+            --accent-color: #FFD700;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            padding: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        #map {
+            height: 65vh;
+            width: 95%;
+            margin: 2rem auto;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            border: 3px solid white;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #map:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        #route-info {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        #route-info b {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .leaflet-popup-content {
+            font-family: 'Tajawal' !important;
+            text-align: right !important;
+            font-size: 1.2rem !important;
+            direction: rtl;
+        }
+
+        .leaflet-marker-icon {
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.16));
+        }
+
+        .metro-station-marker {
+            stroke: white;
+            stroke-width: 2;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                padding: 1rem;
+            }
+            
+            #map {
+                height: 55vh;
+                width: 100%;
+                border-radius: 15px;
+            }
+            
+            #route-info {
+                padding: 1.5rem;
+                width: 95%;
+            }
+        }
+
+    </style>
+</head>
+<body dir="rtl">
+    <h1>خريطة مترو الرياض</h1>
+    <div id="map"></div>
+    <p id="route-info">اضغط على الخريطة لتحديد موقعك ووجهتك</p>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        class PriorityQueue {
+            constructor() { this.elements = []; }
+            enqueue(element, priority) { 
+                this.elements.push({element, priority}); 
+                this.sort(); 
+            }
+            dequeue() { return this.elements.shift(); }
+            sort() { 
+                this.elements.sort((a, b) => a.priority - b.priority); 
+            }
+            isEmpty() { return this.elements.length === 0; }
+        }
+
+        // إعداد الخريطة
+        var map = L.map('map').setView([24.7136, 46.6753], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap & CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // بيانات الخطوط
+        var metroLines = {
+    yellow: {
+        color: "yellow", stations: [
+            { coords: [24.7678740402426, 46.6430089081625], name: "محطة كافد", showMarker: true },
+            { coords: [24.774756, 46.640741], name: "محطة كافد", showMarker: false },
+            { coords: [24.779276, 46.643816], name: "محطة كافد", showMarker: false },
+            { coords: [24.7862173626048, 46.6601128311745], name: "محطة الربيع", showMarker: true },
+            { coords: [24.8014266428389, 46.6962161224483], name: "محطة عثمان بن عفان", showMarker: true },
+            { coords: [24.8071510469124, 46.7095830538778], name: "محطة سابك", showMarker: true },
+            { coords: [24.810108, 46.713344], name: "محطة سابك", showMarker: false },
+            { coords: [24.814600, 46.713301], name: "محطة سابك", showMarker: false },
+            { coords: [24.830053, 46.721256], name: "محطة سابك", showMarker: false },
+            { coords: [24.832250, 46.721414], name: "محطة جامعة الاميرة نورة 1", showMarker: false },
+            { coords: [24.838465, 46.717732], name: "محطة جامعة الاميرة نورة 1", showMarker: false },
+            { coords: [24.841272, 46.717314], name: "محطة جامعة الاميرة نورة 1", showMarker: true },
+            { coords: [24.849805, 46.710323], name: "محطة جامعة الاميرة نورة 2", showMarker: false },
+            { coords: [24.859618, 46.704291], name: "محطة جامعة الاميرة نورة 2", showMarker: true },
+            { coords: [24.875331, 46.694711], name: "محطة جامعة الاميرة نورة 2", showMarker: false },
+            { coords: [24.888583, 46.694588], name: "محطة جامعة الاميرة نورة 2", showMarker: false },
+            { coords: [24.895045, 46.697240], name: "محطة جامعة الاميرة نورة 2", showMarker: false },
+            { coords: [24.902126, 46.705440], name: "محطة جامعة الاميرة نورة 2", showMarker: false },
+            { coords: [24.910825, 46.721147], name: "صالة رقم 5", showMarker: false },
+            { coords: [24.918270, 46.723144], name: "صالة رقم 5", showMarker: false },
+            { coords: [24.9410118810569, 46.7109215436514], name: "صالة رقم 5", showMarker: true },
+            { coords: [24.9561451150526, 46.7022528011584], name: "صالة رقم 3-4", showMarker: true },
+            { coords: [24.961117, 46.698956], name: "صالة رقم 2-1", showMarker: true }
+        ]
+    },
+    red: {
+        color: "red", stations: [
+            { coords: [24.7103062218672, 46.6283573858765], name: "جامعة الملك سعود", showMarker: true },
+            { coords: [24.715485, 46.632885], name: "جامعة الملك سعود", showMarker: false },
+            { coords: [24.715432, 46.634324], name: "واحة الملك سلمان", showMarker: false },
+            { coords: [24.716028, 46.635747], name: "واحة الملك سلمان", showMarker: false },
+            { coords: [24.7170630090742, 46.6386071632697], name: "واحة الملك سلمان", showMarker: true },
+            { coords: [24.7211022175657, 46.6481382884355], name: "المدينة التقنية", showMarker: true },
+            { coords: [24.7238439086365, 46.6545792090235], name: "التخصصي ", showMarker: true },
+            { coords: [24.726533, 46.662043], name: "STC", showMarker: false },
+            { coords: [24.726053, 46.665001], name: "STC", showMarker: false },
+            { coords: [24.726597, 46.666697], name: "STC", showMarker: true },
+            { coords: [24.728133, 46.669038], name: "STC", showMarker: false },
+            { coords: [24.730979, 46.671337], name: "STC", showMarker: false },
+            { coords: [24.7333496017795, 46.6770909900467], name: "الورود", showMarker: true },
+            { coords: [24.7368253219394, 46.6853554906618], name: "طريق الملك عبدالعزيز", showMarker: true },
+            { coords: [24.7401132964319, 46.6948417000634], name: "وزارة التعليم", showMarker: true },
+            { coords: [24.7481900854673, 46.7122959660363], name: "النزهة", showMarker: true },
+            { coords: [24.7546021927314, 46.7271091850735], name: "مركز الرياض للمعارض", showMarker: true },
+            { coords: [24.767675, 46.758966], name: "طريق خالد بن الوليد", showMarker: true },
+            { coords: [24.771969, 46.768910], name: "محطة الحمراء", showMarker: false },
+            { coords: [24.7759490248002, 46.7766872056109], name: "محطة الحمراء", showMarker: true },
+            { coords: [24.778424, 46.783530], name: "الخليج", showMarker: false },
+            { coords: [24.779794, 46.789564], name: "الخليج", showMarker: false },
+            { coords: [24.7822455169668, 46.794473848239], name: "الخليج", showMarker: true },
+            { coords: [24.7924317817852, 46.8109399673992], name: "اشبيليا", showMarker: true },
+            { coords: [24.801526, 46.825511], name: "مدينة الملك فهد الرياضية", showMarker: false },
+            { coords: [24.801409, 46.826412], name: "مدينة الملك فهد الرياضية", showMarker: false },
+            { coords: [24.792676, 46.834181], name: "مدينة الملك فهد الرياضية", showMarker: false },
+            { coords: [24.792545, 46.835134], name: "مدينة الملك فهد الرياضية", showMarker: false },
+            { coords: [24.7930678858698, 46.8365958519172], name: "مدينة الملك فهد الرياضية", showMarker: true }
+        ]
+    },
+    purple: {
+        color: "purple", stations: [
+            { coords: [24.7678740402426, 46.6430089081625], name: "محطة كافد", showMarker: true },
+            { coords: [24.774756, 46.640741], name: "محطة كافد", showMarker: false },
+            { coords: [24.779276, 46.643816], name: "محطة كافد", showMarker: false },
+            { coords: [24.7862173626048, 46.6601128311745], name: "محطة الربيع", showMarker: true },
+            { coords: [24.8014266428389, 46.6962161224483], name: "محطة عثمان بن عفان", showMarker: true },
+            { coords: [24.8071510469124, 46.7095830538778], name: "محطة سابك", showMarker: true },
+            { coords: [24.808753, 46.713983], name: "محطة سابك", showMarker: false },
+            { coords: [24.808585, 46.714216], name: "محطة سابك", showMarker: false },
+            { coords: [24.804474, 46.715945], name: "محطة سابك", showMarker: false },
+            { coords: [24.794895, 46.720234], name: "محطة سابك", showMarker: false },
+            { coords: [24.792460, 46.719737], name: "محطة سابك", showMarker: false },
+            { coords: [24.791066, 46.720214], name: "محطة غرناطية", showMarker: false },
+            { coords: [24.788068, 46.723977], name: "محطة غرناطية", showMarker: false },
+            { coords: [24.786229, 46.725070], name: "محطة غرناطية", showMarker: false },
+            { coords: [24.785642, 46.725743], name: "محطة غرناطية", showMarker: false },
+            { coords: [24.785660, 46.727106], name: "محطة غرناطية", showMarker: false },
+            { coords: [24.7865272753978, 46.7292831080613], name: "محطة غرناطية", showMarker: true },
+            { coords: [24.799606, 46.760640], name: "محطة اليرموك", showMarker: false },
+            { coords: [24.799502, 46.761515], name: "محطة اليرموك", showMarker: false },
+            { coords: [24.798791, 46.762456], name: "محطة اليرموك", showMarker: false },
+            { coords: [24.7912982035996, 46.7662397988552], name: "محطة اليرموك", showMarker: true },
+            { coords: [24.785133, 46.769904], name: "محطة اليرموك", showMarker: false },
+            { coords: [24.7759490248002, 46.7766872056109], name: "محطة الحمراء", showMarker: true },
+            { coords: [24.764522, 46.785072], name: "محطة الأندلس", showMarker: false },
+            { coords: [24.763516, 46.785203], name: "محطة الأندلس", showMarker: false },
+            { coords: [24.756780276022, 46.7904404126127], name: "محطة الأندلس", showMarker: true },
+            { coords: [24.745335, 46.798430], name: "محطة طريق خريص", showMarker: false },
+            { coords: [24.742702, 46.797567], name: "محطة طريق خريص", showMarker: false },
+            { coords: [24.741876, 46.797731], name: "محطة طريق خريص", showMarker: false },
+            { coords: [24.740801, 46.798522], name: "محطة طريق خريص", showMarker: true },
+            { coords: [24.738803, 46.799889], name: "محطة طريق خريص", showMarker: false },
+            { coords: [24.737892, 46.800075], name: "محطة طريق خريص", showMarker: false },
+            { coords: [24.737286, 46.800373], name: "محطة السلام", showMarker: false },
+            { coords: [24.7227505033675, 46.8113891250413], name: "محطة السلام", showMarker: true },
+            { coords: [24.7006600279772, 46.8273611707952], name: "محطة النسيم", showMarker: true }
+        ]
+    }
+};
+
+        // بناء الرسم البياني
+        const stationGraph = {};
+        Object.values(metroLines).forEach(line => {
+            line.stations.forEach((station, index) => {
+                const key = `${station.name}|${station.lineId}`;
+                if (!stationGraph[key]) stationGraph[key] = { connections: [] };
+
+                // توصيل المحطات في نفس الخط
+                if (index > 0) {
+                    const prevKey = `${line.stations[index-1].name}|${line.stations[index-1].lineId}`;
+                    stationGraph[key].connections.push({ node: prevKey, cost: 1 });
+                    stationGraph[prevKey].connections.push({ node: key, cost: 1 });
+                }
+
+                // توصيل المحطات المشتركة
+                Object.values(metroLines).forEach(otherLine => {
+                    if (otherLine.id !== line.id) {
+                        otherLine.stations.forEach(otherStation => {
+                            if (otherStation.name === station.name) {
+                                const otherKey = `${otherStation.name}|${otherLine.id}`;
+                                stationGraph[key].connections.push({ node: otherKey, cost: 0 });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        // دالة إيجاد المسار الأمثل
+        function findShortestPath(startStation, endStation) {
+            const startKey = `${startStation.name}|${startStation.lineId}`;
+            const endKey = `${endStation.name}|${endStation.lineId}`;
+
+            const distances = {};
+            const prev = {};
+            const pq = new PriorityQueue();
+
+            Object.keys(stationGraph).forEach(node => distances[node] = Infinity);
+            distances[startKey] = 0;
+            pq.enqueue(startKey, 0);
+
+            while (!pq.isEmpty()) {
+                const { element: current } = pq.dequeue();
+                if (current === endKey) break;
+
+                stationGraph[current].connections.forEach(({ node, cost }) => {
+                    const alt = distances[current] + cost;
+                    if (alt < distances[node]) {
+                        distances[node] = alt;
+                        prev[node] = current;
+                        pq.enqueue(node, alt);
+                    }
+                });
+            }
+
+            // حساب عدد المحطات الفعلي
+            let current = endKey;
+            const visited = new Set();
+            while (current && prev[current]) {
+                const [name] = current.split('|');
+                if (!visited.has(name)) visited.add(name);
+                current = prev[current];
+            }
+
+            return { 
+                totalStations: visited.size,
+                startStationName: startStation.name,
+                endStationName: endStation.name 
+            };
+        }
+
+        // دالة حساب الوقت والمعلومات
+        function calculateRoute(start, end) {
+            const { totalStations, startStationName, endStationName } = findShortestPath(start, end);
+            
+            // حساب أوقات المشي
+            const startPoint = startMarker.getLatLng();
+            const endPoint = endMarker.getLatLng();
+            
+            const walkToStation = (startPoint.distanceTo(L.latLng(start.coords)) / 1000 / 5 * 60).toFixed(1);
+            const walkFromStation = (endPoint.distanceTo(L.latLng(end.coords)) / 1000 / 5 * 60).toFixed(1);
+            
+            // حساب الوقت الإجمالي
+            const metroTime = totalStations * 4;
+            const totalTime = (parseFloat(walkToStation) + metroTime + parseFloat(walkFromStation)).toFixed(1);
+
+            // عرض النتائج
+            document.getElementById('route-info').innerHTML = `
+                <b>محطة الانطلاق:</b> ${startStationName}<br>
+                <b>محطة الوصول:</b> ${endStationName}<br>
+                <b>عدد المحطات:</b> ${totalStations}<br>
+                <b>وقت المشي إلى المحطة:</b> ${walkToStation} دقيقة<br>
+                <b>وقت الرحلة بالمترو:</b> ${metroTime} دقيقة<br>
+                <b>وقت المشي من المحطة:</b> ${walkFromStation} دقيقة<br>
+                <b>الوقت الإجمالي:</b> ${totalTime} دقيقة
+            `;
+        }
+
+        // إعداد العلامات والنقر
+        var startMarker, endMarker, startStation, endStation;
+
+        function findNearestStation(lat, lon) {
+            let nearest = null, minDist = Infinity;
+            Object.values(metroLines).forEach(line => {
+                line.stations.forEach(station => {
+                    if (station.showMarker) {
+                        const dist = L.latLng(lat, lon).distanceTo(L.latLng(station.coords));
+                        if (dist < minDist) {
+                            minDist = dist;
+                            nearest = station;
+                        }
+                    }
+                });
+            });
+            return nearest;
+        }
+
+        map.on('click', function(e) {
+            if (!startMarker || (startMarker && endMarker)) {
+                if (startMarker) map.removeLayer(startMarker);
+                if (endMarker) map.removeLayer(endMarker);
+                startMarker = L.marker(e.latlng).addTo(map).bindPopup("موقعك الحالي").openPopup();
+                startStation = findNearestStation(e.latlng.lat, e.latlng.lng);
+                endMarker = null;
+            } else {
+                endMarker = L.marker(e.latlng).addTo(map).bindPopup("وجهتك").openPopup();
+                endStation = findNearestStation(e.latlng.lat, e.latlng.lng);
+                if (startStation && endStation) calculateRoute(startStation, endStation);
+            }
+        });
+
+        // رسم الخطوط والمحطات
+        Object.values(metroLines).forEach(line => {
+            L.polyline(line.stations.map(s => s.coords), { 
+                color: line.color, 
+                weight: 6 
+            }).addTo(map);
+            
+            line.stations.forEach(station => {
+                if (station.showMarker) {
+                    L.circleMarker(station.coords, {
+                        radius: 8,
+                        color: line.color,
+                        fillColor: line.color,
+                        fillOpacity: 1
+                    }).bindPopup(station.name).addTo(map);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

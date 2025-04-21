@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="background">
+    <div class="login-card">
+      <div class="card-header">
+        <div class="logo">
+          <h1>Reset Account Password</h1>
+        </div>
+        <p>To reset your password, enter your email address.</p>
+      </div>
+      <form id="forgotPasswordForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <button type="submit">Submit</button>
+        <div class="log">
+          <br>
+          <a href="index.html">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("forgotPasswordForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+
+      try {
+        const response = await fetch("http://localhost:5000/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message); // Inform user to check their email
+        } else {
+          alert(result.message || "An error occurred");
+        }
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        alert("Unable to connect to the server");
+      }
+    });
+  </script>
+</body>
+</html>

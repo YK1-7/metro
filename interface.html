@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترو الرياض</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            direction: rtl;
+        }
+
+       
+        nav {
+            background-color: #0da514;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav .menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a, nav button {
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, nav button:hover {
+            background-color: #228b22; 
+        }
+
+        nav button {
+            background-color: #fff;
+            color: #0da514;
+            border: 1px solid #0da514;
+            cursor: pointer;
+        }
+
+        
+        header {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #0da514;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        
+        .routes {
+    padding: 20px;
+}
+
+.route {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: right;
+    cursor: pointer;
+}
+
+
+button.route {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+}
+
+.route-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.yellow { background-color: #ffd700; }
+.red { background-color: #ff4500; }
+.purple { background-color: #8a2be2; }
+
+.route-info {
+    flex-grow: 1;
+}
+
+.route-info h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.route-info p {
+    font-size: 14px;
+    color: #666;
+}
+
+.route-arrow {
+    font-size: 18px;
+    color: #999;
+}
+.route:hover{
+    background-color: #ded9d9;
+}
+        
+        footer {
+            background-color: #0da514;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+   
+    <nav>
+        <div class="menu">
+            <a href="map.html">الخريطة</a>
+            <a href="tickets.html">التذاكر</a>
+            <a href="Lines.html">المسارات</a>
+            <a href="Plan.html">حدد رحلتك</a>
+            <a href="FAQar.html">الاسئلة الشائعة</a>
+        </div>
+        <div class="menu">
+            <button><a href="interfaceEN.html" style="color: #0da514;">EN</a></button>
+            <a href="indexAR.html">تسجيل الدخول</a>
+        </div>
+    </nav>
+
+    
+    <header>
+        <h1>مترو الرياض</h1>
+        <p>
+            يربط مترو الرياض المدينة بشبكة نقل حديثة، مما يساهم في تقليل الازدحام وتعزيز جودة الحياة.
+        </p>
+        
+    </header>
+
+   
+    <section class="routes">
+        <button type="button" class="route" onclick="window.location.href='Lines.html'">
+            <div class="route-icon yellow">1</div>
+            <div class="route-info">
+                <h3>المسار الأصفر</h3>
+                <p>KAFD ↔ المطار T1-2</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+        <button type="button" class="route"onclick="window.location.href='Lines.html'">
+            <div class="route-icon red">2</div>
+            <div class="route-info">
+                <h3>المسار الأحمر</h3>
+                <p>جامعة الملك سعود ↔ مدينة الملك فهد الرياضية</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+        <button type="button" class="route" onclick="window.location.href='Lines.html'">
+            <div class="route-icon purple">3</div>
+            <div class="route-info">
+                <h3>المسار البنفسجي</h3>
+                <p>KAFD ↔ النسيم</p>
+            </div>
+            <div class="route-arrow">›</div>
+        </button>
+    </section>
+        <center>
+        <img src="metro.png"
+        height="300"width="1000"
+        
+        >
+    </center>
+        <h1 style="color: #0da514;">
+            نبذة عن مترو الرياض
+        </h1>
+        <p>
+            تأسس النقل العام في الرياض تحت قيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود، ولي العهد، رئيس مجلس الوزراء ورئيس مجلس إدارة الهيئة الملكية لمدينة الرياض (RCRC). يعد هذا النظام الشامل للنقل وسيلة لخدمة سكان وزوار مدينة الرياض.
+
+يربط النظام المدينة من خلال مجموعة متنوعة من وسائل النقل، بما في ذلك خطوط المترو، الحافلات، النقل السريع بالحافلات (BRT)، والحافلات المغذية، مما يوفر اتصالاً سلساً عبر أنحاء المدينة بالإضافة إلى مرافق "Park & Ride" للمسافرين.
+
+يكرس النقل العام في الرياض جهوده لتقديم خدمة عالية الجودة وسهلة الاستخدام تسهم في النمو الاقتصادي والاستدامة البيئية. ومن خلال تلبية احتياجات التنقل المتنوعة، يعزز النظام سهولة الحركة داخل المدينة ويقلل من الاعتماد على المركبات الخاصة، مما يجعل التنقل عبر العاصمة السعودية سهلاً وموثوقاً ومريحاً.
+        </p>
+    </section>
+
+    <footer>
+        <nav>
+        <div class="menu">
+            <a href="map.html" style="color: #ddd;">الخريطة</a>
+            <a href="tickets.html" style="color: #ddd;">التذاكر</a>
+            <a href="Lines.html" style="color: #ddd;">المسارات</a>
+            <a href="Plan.html" style="color: #ddd;">حدد رحلتك</a>
+            <a href="FAQar.html" style="color: #ddd;">الأسئلة الشائعة</a>
+        </div>
+    </nav>
+        <p>للتواصل: <a href="tel:+966123456789">789 456 123 966+</a></p>
+        <p>© جميع الحقوق محفوظة لمترو الرياض 2025</p>
+    </footer>
+</body>
+</html>

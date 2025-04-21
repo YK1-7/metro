@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riyadh Metro Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+</div>
+
+  
+  <div class="background">
+    <div class="login-card">
+      <div class="card-header">
+        <div class="logo">
+          <h1>Riyadh Metro</h1>
+        </div>
+        <p>Welcome! Please login to continue your journey.</p>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="forgot-link">
+          <a href="forgot.html">Forgot Password?</a>
+        </div>
+        <button type="submit">Login</button>
+        <div class="sign">
+          <p>Don't have an account? <a href="signup-full.html">Create account</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+      document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert(result.message);
+      window.location.href = "interfaceEN.html"; 
+    } else {
+      const error = await response.json();
+      alert(error.message || "Login failed");
+    }
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    alert("Unable to connect to the server");
+  }
+});
+
+  </script>
+</body>
+</html>

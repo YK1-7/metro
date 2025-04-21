@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اشترك</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    
+    <div class="signup-container">
+        <h2>اشترك</h2>
+        <form id="signupForm"> 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first-name">الأسم الأول</label>
+                    <input type="text" id="first-name" name="first-name" placeholder=" الأسم الأول" required>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">الأسم الأخير</label>
+                    <input type="text" id="last-name" name="last-name" placeholder="الأسم الأخير" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="number" placeholder="رقم الهاتف" required pattern="[0-9]{10,15}" maxlength="15" minlength="10">
+            </div>
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" name="username" placeholder="ادخل اسم المستخدم" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الألكتروني</label>
+                <input type="email" id="email" name="email" placeholder="ادخل بريدك الألكتروني" required>
+            </div>
+            <div class="form-group">
+                <label for="bday">تاريخ الميلاد</label>
+                <input type="date" id="bday" required><br>
+               
+            </div>
+            <div class="form-group">
+                <label for="title">جنس</label>
+            <select>
+                <option value="male">ذكر</option>
+                <option value="female">انثى</option>
+            </select><br>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة السر</label>
+                <input type="password" id="password" name="password" placeholder="ادخل كلمة السر" required maxlength="15" minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">تأكيد كلمة السر</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="تأكيد كلمة السر" required>
+            </div>
+            <button type="submit" class="submit-btn">سجل</button>
+            <div class="log">
+                <br>
+                <a href="indexAR.html">العودة</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById("first-name").value;
+            const lastName = document.getElementById("last-name").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                alert("كلمات السر غير متطابقة!");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/auth/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ firstName, lastName, phone, email, password }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message);
+                    window.location.href = "indexAR.html"; 
+                } else {
+                    alert(result.message || "حدث خطأ أثناء التسجيل");
+                }
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                alert("تعذر الاتصال بالخادم");
+            }
+        });
+    </script>
+</body>
+
+</html>

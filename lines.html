@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواعيد الرحلات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .route-selector {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .route-selector.purple {
+            background-color: #4B0082;
+        }
+        .route-selector.yellow {
+            background-color: #FFD700; 
+        }
+        .route-selector.red {
+            background-color: #8B0000; 
+        }
+        .route-selector label, .route-selector select {
+            color: rgb(6, 6, 6);
+        }
+        .route-line {
+            position: relative;
+            margin: 20px 0;
+            padding-right: 20px;
+            border-right: 4px solid;
+        }
+        .route-line.purple {
+            border-color: #4B0082;
+        }
+        .route-line.yellow {
+            border-color: #FFD700; 
+        }
+        .route-line.red {
+            border-color: #8B0000; 
+        }
+        .station {
+            position: relative;
+            padding: 10px 0;
+        }
+        .station-circle {
+            position: absolute;
+            right: -27px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: currentColor;
+            border-radius: 50%;
+        }
+        .hidden {
+            display: none;
+        }
+        .station-columns {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .station-column {
+            flex: 1;
+            padding: 0 10px;
+        }
+        .station-column:first-child {
+            flex: 2;
+        }
+    </style>
+    <script>
+        function openPopup(color) {
+            var popup = window.open("", "Popup", "width=300,height=400");
+            popup.document.write(`
+                <html lang="ar">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>مواعيد الرحلات</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            direction: rtl;
+                            text-align: right;
+                        }
+                        .route-line {
+                            position: relative;
+                            margin: 20px 0;
+                            padding-right: 20px;
+                            border-right: 4px solid ${color};
+                        }
+                        .station {
+                            position: relative;
+                            padding: 10px 0;
+                        }
+                        .station-circle {
+                            position: absolute;
+                            right: -27px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            width: 10px;
+                            height: 10px;
+                            background-color: ${color};
+                            border-radius: 50%;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>مواعيد الرحلات</h1>
+                    <div class="route-line">
+            `);
+            for (var hour = 6; hour <= 12; hour++) {
+                for (var minute = 0; minute < 60; minute += 5) {
+                    var time = hour + ":" + (minute < 10 ? "0" + minute : minute) + " AM";
+                    popup.document.write(`
+                        <div class="station">
+                            <div>${time}</div>
+                            <span class="station-circle"></span>
+                        </div>
+                    `);
+                }
+            }
+            for (var hour = 1; hour <= 11; hour++) {
+                for (var minute = 0; minute < 60; minute += 5) {
+                    var time = hour + ":" + (minute < 10 ? "0" + minute : minute) + " PM";
+                    popup.document.write(`
+                        <div class="station">
+                            <div>${time}</div>
+                            <span class="station-circle"></span>
+                        </div>
+                    `);
+                }
+            }
+            popup.document.write(`
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+
+        function setRouteColor() {
+            var routeSelect = document.getElementById("route-select");
+            var selectedRoute = routeSelect.value;
+            var color = selectedRoute === "purple" ? "#4B0082" : selectedRoute === "yellow" ? "#FFD700" : "#8B0000";
+            openPopup(color);
+        }
+    </script>
+</head>
+<body>
+    <h1>مواعيد الرحلات</h1>
+
+    <div id="route-selector" class="route-selector purple">
+        <label for="route-select">اختر المسار:</label>
+        <select id="route-select">
+            <option value="purple">المسار البنفسجي</option>
+            <option value="yellow">المسار الأصفر</option>
+            <option value="red">المسار الأحمر</option>
+        </select>
+    </div>
+
+    <div id="purple" class="route-line purple">
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">مركز الملك عبدالله المالي</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الربيع</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">عثمان بن عفان</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">سابك</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">غرناطة</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">اليرموك</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الحمراء</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الأندلس</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">خريص</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">السلام</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">النسيم</div>
+                <div class="station-column"><button onclick="openPopup()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #4B0082;"></span>
+        </div>
+    </div>
+
+    <div id="yellow" class="route-line yellow hidden">
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الصالة 1-2</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الصالة 3-4</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الصالة 5</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">جامعة الاميرة نورة 1</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">جامعة الاميرة نورة 2</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">سابك</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">طريق عثمان بن عفان</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الربيع</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">المركز المالي</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #FFD700;"></span>
+        </div>
+    </div>
+    
+    <div id="red" class="route-line red hidden">
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">جامعة الملك سعود</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">واحة الملك سلمان</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">كاكست</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">التخصصي</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">إس تي سي</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الورود</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">طريق الملك عبدالعزيز</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">وزارة التعليم</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">النزهة</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">مركز المعارض</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">خالد بن الوليد</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الحمراء</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">الخليج</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">إشبيلية</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+        <div class="station">
+            <div class="station-columns">
+                <div class="station-column">استاد الملك فهد</div>
+                <div class="station-column"><button onclick="setRouteColor()">المواعيد</button></div>
+            </div>
+            <span class="station-circle" style="color: #8B0000;"></span>
+        </div>
+
+    <script>
+        const selectElement = document.getElementById("route-select");
+        const routeSelector = document.getElementById("route-selector");
+        const routes = document.querySelectorAll(".route-line");
+
+        selectElement.addEventListener("change", function () {
+            const selectedValue = selectElement.value;
+
+            routes.forEach((route) => {
+                route.classList.add("hidden");
+            });
+
+            const activeRoute = document.getElementById(selectedValue);
+            if (activeRoute) {
+                activeRoute.classList.remove("hidden");
+            }
+
+            routeSelector.className = `route-selector ${selectedValue}`;
+        });
+
+        window.addEventListener("load", function () {
+            const defaultRoute = selectElement.value;
+            const defaultRouteElement = document.getElementById(defaultRoute);
+            if (defaultRouteElement) {
+                defaultRouteElement.classList.remove("hidden");
+            }
+            routeSelector.className = `route-selector ${defaultRoute}`;
+        });
+    </script>
+</body>
+</html>
+
+

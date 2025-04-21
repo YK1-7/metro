@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترو الرياض - التذاكر</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            direction: rtl;
+            text-align: right;
+        }
+        header {
+            background-color: #f1f1f1;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+            position: relative;
+        }
+        .language-switch {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #333;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+        .tab.active {
+            border-bottom: 2px solid #4caf50;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .tickets {
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .ticket {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .ticket input[type="radio"] {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            transform: scale(1.5);
+        }
+        .ticket h2 {
+            font-size: 18px;
+            margin: 0 0 5px;
+            color: #333;
+        }
+        .ticket .price {
+            color: #4caf50;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .ticket p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .submit-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .payment-options {
+            margin: 20px 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            
+        }
+        .payment-options button {
+            display: inline-block;
+            width: 20%;
+            padding: 10px 20px;
+            margin: 10px auto;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .apple-pay {
+            background: black;
+            color: white;
+        }
+        .mada {
+            background: #4caf50;
+            color: white;
+        }
+        #mada-form {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+#mada-form label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+#mada-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#mada-form input:focus {
+    border-color: #4caf50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+#mada-form .submit-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+#mada-form .submit-btn:hover {
+    background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="header-title">التذاكر</h1>
+        <button class="language-switch" onclick="switchLanguage()">English</button>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" id="purchase-tab-btn" onclick="switchTab('purchase')">شراء تذكرة</div>
+        <div class="tab" id="my-tickets-tab-btn" onclick="switchTab('myTickets')">تذاكري</div>
+    </div>
+
+    <div class="tickets" id="purchase-tab">
+        <!-- التذاكر -->
+        <div class="ticket" data-ar='{"title":"التذكرة العادية - تذكرة ساعتين","price":"4 ر.س","description":"توفر تذكرة ساعتين عدد رحلات غير محدود بالحافلات والمترو لمدة ساعتين بعد التفعيل."}' 
+             data-en='{"title":"Standard Ticket - 2 Hours","price":"4 SAR","description":"Provides unlimited rides on buses and metro for 2 hours after activation."}'>
+            <input type="radio" name="ticket" value="4">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"التذكرة العادية - تذكرة 3 أيام","price":"20 ر.س","description":"توفر تذكرة 3 أيام عدد رحلات غير محدود بالحافلات والمترو لمدة 3 أيام بعد التفعيل."}' 
+             data-en='{"title":"Standard Ticket - 3 Days","price":"20 SAR","description":"Provides unlimited rides on buses and metro for 3 days after activation."}'>
+            <input type="radio" name="ticket" value="20">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"التذكرة العادية - تذكرة 7 أيام","price":"40 ر.س","description":"توفر تذكرة 7 أيام عدد رحلات غير محدود بالحافلات والمترو لمدة 7 أيام بعد التفعيل."}' 
+             data-en='{"title":"Standard Ticket - 7 Days","price":"40 SAR","description":"Provides unlimited rides on buses and metro for 7 days after activation."}'>
+            <input type="radio" name="ticket" value="40">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"التذكرة العادية - تذكرة 30 يومًا","price":"140 ر.س","description":"توفر تذكرة 30 يومًا عدد رحلات غير محدود بالحافلات والمترو لمدة شهر واحد بعد التفعيل."}' 
+             data-en='{"title":"Standard Ticket - 30 Days","price":"140 SAR","description":"Provides unlimited rides on buses and metro for 30 days after activation."}'>
+            <input type="radio" name="ticket" value="140">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"درجة أولى - تذكرة ساعتين","price":"10 ر.س","description":"توفر تذكرة ساعتين عدد رحلات غير محدود بالدرجة الأولى."}' 
+             data-en='{"title":"First Class - 2 Hours","price":"10 SAR","description":"Provides unlimited rides in First Class for 2 hours after activation."}'>
+            <input type="radio" name="ticket" value="10">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"درجة أولى - تذكرة 3 أيام","price":"50 ر.س","description":"توفر تذكرة 3 أيام عدد رحلات غير محدود بالدرجة الأولى."}' 
+             data-en='{"title":"First Class - 3 Days","price":"50 SAR","description":"Provides unlimited rides in First Class for 3 days after activation."}'>
+            <input type="radio" name="ticket" value="50">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"درجة أولى - تذكرة 7 أيام","price":"100 ر.س","description":"توفر تذكرة 7 أيام عدد رحلات غير محدود بالدرجة الأولى."}' 
+             data-en='{"title":"First Class - 7 Days","price":"100 SAR","description":"Provides unlimited rides in First Class for 7 days after activation."}'>
+            <input type="radio" name="ticket" value="100">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+        </div>
+        <div class="ticket" data-ar='{"title":"درجة أولى - تذكرة 30 يومًا","price":"350 ر.س","description":"توفر تذكرة 30 يومًا عدد رحلات غير محدود بالدرجة الأولى."}' 
+             data-en='{"title":"First Class - 30 Days","price":"350 SAR","description":"Provides unlimited rides in First Class for 30 days after activation."}'>
+            <input type="radio" name="ticket" value="350">
+            <h2 class="ticket-title"></h2>
+            <div class="price"></div>
+            <p class="ticket-description"></p>
+      
+        
+        <script>
+            function showMadaForm() {
+                // إظهار نموذج الدفع باستخدام مدى
+                document.getElementById('mada-form').style.display = 'block';
+            }
+        </script>
+    </div>
+    </div>
+
+    <div class="tickets" id="myTickets-tab" style="display: none;">
+        <p id="no-tickets-message">لا توجد تذاكر حالياً.</p>
+    </div>
+
+</div>
+<div class="payment-options" id="payment-options">
+    <button class="apple-pay" onclick="window.location.href='card.html'">الدفع باستخدام Apple Pay</button>
+    <button class="mada" onclick="showMadaForm()">الدفع باستخدام بطاقة مدى</button>
+</div>
+<div id="mada-form" style="display: none; margin-top: 20px;">
+    <form>
+ 
+       
+        <div>
+            <label id="card-number-label" for="card-number">رقم البطاقة:</label>
+            <input type="text" id="card-number" name="card-number" placeholder="رقم البطاقة" required pattern="[0-9]">
+        </div>
+        <div>
+            <label id="card-name-label" for="card-name">الاسم على البطاقة:</label>
+            <input type="text" id="card-name" name="card-name" placeholder="الاسم على البطاقة" required >
+        </div>
+        <div>
+            <label id="cvv-label" for="cvv">الرمز في الخلف:</label>
+            <input type="text" id="cvv" name="cvv" placeholder="الرمز في الخلف (CVV)" maxlength="3" minlength="3" required>
+        </div>
+        <button type="submit" class="submit-btn" id="mada-submit-btn" onclick="window.location.href='card.html'">إتمام الدفع</button>
+    </form>
+</div>
+
+    <script>
+        const translations = {
+            ar: {
+                headerTitle: "التذاكر",
+                purchaseTab: "شراء تذكرة",
+                myTicketsTab: "تذاكري",
+                switchButton: "English",
+                submitButton: "التالي",
+                applePay: "الدفع باستخدام Apple Pay",
+                mada: "الدفع باستخدام بطاقة مدى",
+                cardNumber: "رقم البطاقة:",
+                cardName: "الاسم على البطاقة:",
+                cvv: "الرمز في الخلف:",
+                madaSubmit: "إتمام الدفع",
+                madaPlaceholderNumber: "رقم البطاقة",
+                madaPlaceholderName: "الاسم على البطاقة",
+                madaPlaceholderCvv: "الرمز في الخلف (CVV)",
+                noTicketsMessage :"لا توجد تذاكر حالياً "
+    },
+            
+            en: {
+                headerTitle: "Tickets",
+                purchaseTab: "Purchase Ticket",
+                myTicketsTab: "My Tickets",
+                switchButton: "عربي",
+                submitButton: "Next",
+                applePay: "Pay with Apple Pay",
+                mada: "Pay with Mada Card",
+                cardNumber: "Card Number:",
+                cardName: "Name on Card:",
+                cvv: "CVV Code:",
+                madaSubmit: "Complete Payment",
+                madaPlaceholderNumber: "Card Number",
+                madaPlaceholderName: "Name on Card",
+                madaPlaceholderCvv: "CVV Code",
+                noTicketsMessage: "No tickets available right now"
+            }
+        };
+
+        let currentLanguage = "ar";
+
+        function switchLanguage() {
+            currentLanguage = currentLanguage === "ar" ? "en" : "ar";
+            updateTexts();
+        }
+
+        function updateTexts() {
+    document.querySelectorAll(".ticket").forEach(ticket => {
+        const data = JSON.parse(ticket.dataset[currentLanguage]);
+        ticket.querySelector(".ticket-title").innerText = data.title;
+        ticket.querySelector(".price").innerText = data.price;
+        ticket.querySelector(".ticket-description").innerText = data.description;
+    });
+
+    const lang = translations[currentLanguage];
+    document.getElementById("header-title").innerText = lang.headerTitle;
+    document.getElementById("purchase-tab-btn").innerText = lang.purchaseTab;
+    document.getElementById("my-tickets-tab-btn").innerText = lang.myTicketsTab;
+    document.querySelector(".language-switch").innerText = lang.switchButton;
+
+    document.getElementById("no-tickets-message").innerText = lang.noTicketsMessage;
+    document.querySelector(".apple-pay").innerText = lang.applePay;
+    document.querySelector(".mada").innerText = lang.mada;
+
+
+    document.getElementById("card-number-label").innerText = lang.cardNumber;
+    document.getElementById("card-name-label").innerText = lang.cardName;
+    document.getElementById("cvv-label").innerText = lang.cvv;
+    document.getElementById("mada-submit-btn").innerText = lang.madaSubmit;
+    document.getElementById("card-number").placeholder = lang.madaPlaceholderNumber;
+    document.getElementById("card-name").placeholder = lang.madaPlaceholderName;
+    document.getElementById("cvv").placeholder = lang.madaPlaceholderCvv;
+    document.getElementById("payment-options").style.display = currentLanguage === "ar" ? "block" : "block";
+
+    const paymentOptions = document.getElementById("payment-options");
+    if (document.getElementById("myTickets-tab").style.display === "block") {
+        paymentOptions.style.display = "none"; // إخفاء عند تفعيل تبويب "تذاكري"
+    } else {
+        paymentOptions.style.display = "flex"; // إظهار عند تفعيل تبويب "شراء تذكرة"
+    }
+}
+
+function switchTab(tab) {
+    // التحكم في عرض التبويبات
+    document.getElementById("purchase-tab").style.display = tab === "purchase" ? "block" : "none";
+    document.getElementById("myTickets-tab").style.display = tab === "myTickets" ? "block" : "none";
+
+    // التحكم في عرض قسم الدفع
+    const paymentOptions = document.getElementById("payment-options");
+    const madaForm = document.getElementById("mada-form");
+
+    if (tab === "myTickets") {
+        paymentOptions.style.display = "none"; // إخفاء أزرار الدفع عند "تذاكري"
+        madaForm.style.display = "none"; // إخفاء نموذج مدى
+    } else {
+        paymentOptions.style.display = "flex"; // إظهار أزرار الدفع عند "شراء تذكرة"
+    }
+
+    // تحديث حالة التبويبات
+    const tabs = document.querySelectorAll(".tab");
+    tabs.forEach(tabElement => tabElement.classList.remove("active"));
+    document.getElementById(tab === "purchase" ? "purchase-tab-btn" : "my-tickets-tab-btn").classList.add("active");
+}
+      
+      
+      
+        
+
+        function selectTicket() {
+            const selectedTicket = document.querySelector('input[name="ticket"]:checked');
+            if (selectedTicket) {
+                alert(currentLanguage === "ar" ?' تم اختيار التذكرة بسعر ${selectedTicket.value} ر.س ': 'Selected ticket price: ${selectedTicket.value} SAR');
+            } else {
+                alert(currentLanguage === "ar" ? "يرجى اختيار نوع التذكرة." : "Please select a ticket type.");
+            }
+        }
+
+        updateTexts();
+    </script>
+</body>
+</html>
